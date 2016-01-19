@@ -6,3 +6,7 @@ collaborative editing.
 
 # Summa Technologiae
 
+## NPM
+
+Node package manager and its repository of useful javascript.
+
