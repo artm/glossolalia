@@ -12,7 +12,8 @@ gulp.task('webpack', function() {
   return gulp
     .src('./src/js/**/*.js')
     .pipe(webpack(require('./config/webpack.config')))
-    .pipe(gulp.dest('./dist/js'));
+    .pipe(gulp.dest('./dist/js'))
+    .pipe(bs.stream());
 });
 
 gulp.task('static:copy', function() {
@@ -23,7 +24,8 @@ gulp.task('static:copy', function() {
 
 gulp.task('serve', function() {
   bs.init(require('./config/browser-sync'));
-  gulp.watch('src/static/**/*', ['static:copy']).on('change', bs.reload);
+  gulp.watch('./src/static/**/*', ['static:copy']).on('change', bs.reload);
+  gulp.watch('./src/js/**/*.js', ['webpack']);
 });
 
 gulp.task('default', ['clean:dist', 'webpack', 'static:copy']);
