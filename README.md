@@ -13,3 +13,9 @@ Node package manager and its repository of useful javascript.
 ## Gulp
 
 Development tasks / authomation runner.
+
+## Webpack
+
+Module system for the browser using CommonJS style modules from NPM.
+
+
