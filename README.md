@@ -18,4 +18,6 @@ Development tasks / authomation runner.
 
 Module system for the browser using CommonJS style modules from NPM.
 
+## BrowserSync
 
+Serve the project in development and reload assets when they change.

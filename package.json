@@ -9,6 +9,7 @@
   "author": "artm",
   "license": "MIT",
   "devDependencies": {
+    "browser-sync": "^2.11.1",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-copy": "0.0.2",
