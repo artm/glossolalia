@@ -6,8 +6,10 @@ gulp.task('clean:dist', function() {
   return del(['dist/**/*']);
 });
 
-gulp.task('default', ['clean:dist'], function() {
+gulp.task('webpack', function() {
   return gulp.src('./src/js/**/*.js')
   .pipe(webpack(require('./config/webpack.config.js')))
   .pipe(gulp.dest('./dist/js'));
 });
+
+gulp.task('default', ['clean:dist', 'webpack']);
