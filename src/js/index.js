@@ -1,28 +1,28 @@
 var clientId = '374207887542-84o0a3vmdl28avsg6232kmes45udaqqd.apps.googleusercontent.com';
 var realtimeUtils = new utils.RealtimeUtils({ clientId: clientId });
 
-authorize(setupManualAuthorization);
+authorize(setupManualAuthorization, start);
 
-function authorize(setupManualAuthorization) {
+function authorize(setupManualAuthorization, onSuccessfulAuthorization) {
   console.trace('trying to authorize');
   realtimeUtils.authorize(function authorizeCallback(response){
     if(response.error){
       console.trace('auth failed, ask user to authorize manually', response);
-      setupManualAuthorization();
+      setupManualAuthorization(onSuccessfulAuthorization);
     } else {
       console.trace('auth succeeded', response);
-      start();
+      onSuccessfulAuthorization();
     }
   }, false);
 }
 
-function setupManualAuthorization() {
+function setupManualAuthorization(onSuccessfulAuthorization) {
   // Authorization failed because this is the first time the user has used your application,
   // show the authorize button to prompt them to authorize manually.
   var button = document.getElementById('auth_button');
   button.classList.add('visible');
   button.addEventListener('click', function onAuthButtonClicked() {
-    realtimeUtils.authorize(start, true);
+    realtimeUtils.authorize(onSuccessfulAuthorization, true);
   });
 }
 
