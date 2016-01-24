@@ -1,0 +1,7 @@
+#auth_button {
+  display:none;
+}
+
+#auth_button.visible {
+  display:inline;
+}

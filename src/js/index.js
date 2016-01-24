@@ -4,11 +4,13 @@ var realtimeUtils = new utils.RealtimeUtils({ clientId: clientId });
 authorize();
 
 function authorize() {
-  // Attempt to authorize
-  realtimeUtils.authorize(function(response){
+  console.trace('trying to authorize');
+  realtimeUtils.authorize(function authorizeCallback(response){
     if(response.error){
+      console.trace('auth failed', response);
       showAuthorizeButton();
     } else {
+      console.trace('auth succeeded', response);
       start();
     }
   }, false);
@@ -26,35 +28,34 @@ function showAuthorizeButton() {
   });
 }
 
-// Load the Realtime API, no auth needed.
-window.gapi.load('auth:client,drive-realtime,drive-share', start);
-
 function start() {
-  var doc = new GlossolaliaDoc();
-  console.log(doc.model.toJson());
-}
-
-function GlossolaliaDoc() {
-  this.doc = gapi.drive.realtime.newInMemoryDocument();
-  this.model = this.doc.getModel();
-  this.streams = this.model.createList();
-  this.model.getRoot().set('streams', this.streams);
-
-  var masterStream = this.createStream();
-  this.streams.push(masterStream);
-  masterStream.appendFragment("Here be content");
-}
-
-GlossolaliaDoc.prototype.createStream = function() {
-  var doc = this;
-  var stream = this.model.createMap({ title: 'new text', language: 'en' });
-  var fragments = this.model.createList();
-  stream.set('fragments', fragments);
-
-  stream.appendFragment = function(text) {
-    text = doc.model.createString(text);
-    fragments.push(text);
+  console.trace('starting');
+  var id = realtimeUtils.getParam('id');
+  if (id) {
+    console.trace('got id:', id);
+    realtimeUtils.load(id.replace('/', ''), onFileLoaded, onFileInitialize);
+  } else {
+    console.trace('got no id, creating a new drive resource');
+    realtimeUtils.createRealtimeFile('Glossolalia Dev Stub.gloss', onDriveResourceCreated);
   }
-
-  return stream;
 }
+
+function onDriveResourceCreated(createResponse) {
+  console.trace('drive resource created', createResponse);
+  window.history.pushState(null, null, '?id=' + createResponse.id);
+  realtimeUtils.load(createResponse.id, onFileLoaded, onFileInitialize);
+}
+
+function onFileInitialize(model) {
+  console.trace('initializing a new file', model);
+  var s1 = model.createString('Text 1 be here');
+  var s2 = model.createString('Text 2 be here');
+  var ss = model.createList([s1, s2]);
+  model.getRoot().set('streams', ss);
+}
+
+function onFileLoaded(doc) {
+  // take out doc.getModel().getRoot()... and bind it to UI
+  console.trace('file loaded', doc.getModel().toJson());
+}
+
