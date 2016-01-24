@@ -1,3 +1,30 @@
+var clientId = '374207887542-84o0a3vmdl28avsg6232kmes45udaqqd.apps.googleusercontent.com';
+var realtimeUtils = new utils.RealtimeUtils({ clientId: clientId });
+
+authorize();
+
+function authorize() {
+  // Attempt to authorize
+  realtimeUtils.authorize(function(response){
+    if(response.error){
+      showAuthorizeButton();
+    } else {
+      start();
+    }
+  }, false);
+}
+
+function showAuthorizeButton() {
+  // Authorization failed because this is the first time the user has used your application,
+  // show the authorize button to prompt them to authorize manually.
+  var button = document.getElementById('auth_button');
+  button.classList.add('visible');
+  button.addEventListener('click', function () {
+    realtimeUtils.authorize(function(response){
+      start();
+    }, true);
+  });
+}
 
 // Load the Realtime API, no auth needed.
 window.gapi.load('auth:client,drive-realtime,drive-share', start);
