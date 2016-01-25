@@ -42,5 +42,10 @@ function onFileInitialize(model) {
 function onFileLoaded(doc) {
   // take out doc.getModel().getRoot()... and bind it to UI
   console.trace('file loaded', doc.getModel().toJson());
+  var display0 = document.getElementById('stream0');
+  var display1 = document.getElementById('stream1');
+  var root = doc.getModel().getRoot();
+  display0.innerHTML = root.get('streams').get(0).getText();
+  display1.innerHTML = root.get('streams').get(1).getText();
 }
 
