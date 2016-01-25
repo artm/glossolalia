@@ -32,20 +32,55 @@ function onDriveResourceCreated(createResponse) {
 }
 
 function onFileInitialize(model) {
-  console.trace('initializing a new file', model);
-  var s1 = model.createString('Text 1 be here');
-  var s2 = model.createString('Text 2 be here');
+  console.trace('initializing a new file');
+  var s1 = createStream(model, {title: 'Text 1', text: 'Text 1 be here'});
+  var s2 = createStream(model, {title: 'Text 2', text: 'Text 2 be here'});
   var ss = model.createList([s1, s2]);
   model.getRoot().set('streams', ss);
 }
 
 function onFileLoaded(doc) {
-  // take out doc.getModel().getRoot()... and bind it to UI
   console.trace('file loaded', doc.getModel().toJson());
-  var display0 = document.getElementById('stream0');
-  var display1 = document.getElementById('stream1');
   var root = doc.getModel().getRoot();
-  display0.innerHTML = root.get('streams').get(0).getText();
-  display1.innerHTML = root.get('streams').get(1).getText();
+  var streams = root.get('streams').asArray();
+  console.trace('streams:', streams);
+  for(var s in streams) {
+    var cell = document.getElementById('stream' + s);
+    if (cell) {
+      var stream = streams[s];
+      cell.innerHTML = renderStream(stream);
+    }
+  }
 }
 
+function createStream(model, options) {
+  console.trace('creating stream', options);
+  var title = model.createString(options.title);
+  console.trace('title:', title);
+  var paragraphs = model.createList([
+    createParagraph(model, {
+      text: options.text || 'Placeholder'
+    })
+  ]);
+  var stream = model.createMap({
+    title: title,
+    paragraphs: paragraphs,
+  });
+  return stream;
+}
+
+function renderStream(stream) {
+  var paragraphs = stream.get('paragraphs').asArray();
+
+
+  return paragraphs.map(function(paragraph) {
+    return '<p>' + paragraph.get('text') + '</p>';
+  });
+}
+
+function createParagraph(model, options) {
+  var paragraph = model.createMap({
+    text: model.createString(options.text || '')
+  });
+  return paragraph;
+}
