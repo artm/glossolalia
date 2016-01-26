@@ -31,7 +31,7 @@ gulp.task('static:copy', function() {
 gulp.task('serve', function() {
   bs.init(bsConfig);
   gulp.watch('./src/static/**/*', ['static:copy']).on('change', bs.reload);
-  gulp.watch('./src/js/**/*.js', ['webpack']);
+  gulp.watch('./src/js/**/*.{js,tag}', ['webpack']);
 });
 
 gulp.task('default', ['clean:dist', 'webpack', 'static:copy']);
