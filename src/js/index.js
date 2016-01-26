@@ -1,6 +1,9 @@
 var realtimeUtils = require('./realtime_utils');
 var authorize = require('./authorize');
 
+require('./components/editor.tag');
+riot.mount('*');
+
 authorize(setupManualAuthorization, start);
 
 function setupManualAuthorization(onSuccessfulAuthorization) {
@@ -40,7 +43,7 @@ function onFileInitialize(model) {
 }
 
 function onFileLoaded(doc) {
-  console.trace('file loaded', doc.getModel().toJson());
+  console.trace('file loaded');
   var root = doc.getModel().getRoot();
   var streams = root.get('streams').asArray();
   console.trace('streams:', streams);
