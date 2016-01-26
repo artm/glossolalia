@@ -13,7 +13,9 @@
 
 <stream>
   <h1>{ title }</h1>
-  <paragraph each={ paragraphs } paragraph={ this }/>
+  <section contenteditable>
+    <paragraph each={ paragraphs } paragraph={ this }/>
+  </section>
 
   this.title = opts.stream.get('title').text;
   this.paragraphs = opts.stream.get('paragraphs').asArray();
