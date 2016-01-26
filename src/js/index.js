@@ -1,7 +1,7 @@
-var realtimeUtils = require('./realtime_utils');
-var authorize = require('./authorize');
+import realtimeUtils from './realtime_utils';
+import authorize from './authorize';
+import './components/editor.tag';
 
-require('./components/editor.tag');
 riot.mount('*');
 
 authorize(setupManualAuthorization, start);

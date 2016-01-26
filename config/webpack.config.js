@@ -15,10 +15,24 @@ module.exports = {
   ],
   module: {
     preLoaders: [
-      { test: /\.tag$/, exclude: /node_modules/, loader: 'riotjs-loader', query: { type: 'none' } }
+      {
+        test: /\.tag$/,
+        exclude: /node_modules/,
+        loader: 'riotjs-loader',
+        query: {
+          type: 'none'
+        }
+      }
     ],
     loaders: [
-      { test: /\.js$|\.tag$/, exclude: /node_modules/, loader: 'babel-loader' }
+      {
+        test: /\.js$|\.tag$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015']
+        }
+      }
     ]
   },
 };
