@@ -2,8 +2,6 @@ import realtimeUtils from './realtime_utils';
 import authorize from './authorize';
 import './components/editor.tag';
 
-riot.mount('*');
-
 authorize(setupManualAuthorization, start);
 
 function setupManualAuthorization(onSuccessfulAuthorization) {
@@ -44,16 +42,7 @@ function onFileInitialize(model) {
 
 function onFileLoaded(doc) {
   console.trace('file loaded');
-  var root = doc.getModel().getRoot();
-  var streams = root.get('streams').asArray();
-  console.trace('streams:', streams);
-  for(var s in streams) {
-    var cell = document.getElementById('stream' + s);
-    if (cell) {
-      var stream = streams[s];
-      cell.innerHTML = renderStream(stream);
-    }
-  }
+  riot.mount('editor', doc);
 }
 
 function createStream(model, options) {
@@ -70,15 +59,6 @@ function createStream(model, options) {
     paragraphs: paragraphs,
   });
   return stream;
-}
-
-function renderStream(stream) {
-  var paragraphs = stream.get('paragraphs').asArray();
-
-
-  return paragraphs.map(function(paragraph) {
-    return '<p>' + paragraph.get('text') + '</p>';
-  });
 }
 
 function createParagraph(model, options) {
