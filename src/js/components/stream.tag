@@ -14,6 +14,14 @@ import './paragraph.tag'
   this.title = opts.stream.get('title').text;
   this.paragraphs = opts.stream.get('paragraphs').asArray();
 
+  hasSelection() {
+    return !document.getSelection().isCollapsed;
+  }
+
+  hasSelectionAcrossParagraphs() {
+    return this.hasSelection();
+  }
+
   onKeydown(event) {
     console.trace('onKeydown:', event);
     if (event.keyIdentifier === 'Enter') {
@@ -29,8 +37,8 @@ import './paragraph.tag'
 
   onKeypress(event) {
     console.trace('onKeypress:', event);
-    if (!document.getSelection().isCollapsed) {
-      console.trace('handle type-over (perhaps remove paragraphs)');
+    if (this.hasSelectionAcrossParagraphs()) {
+      console.trace('handle type-over (remove paragraphs)');
     } else {
       return true;
     }
@@ -43,10 +51,12 @@ import './paragraph.tag'
 
   onPaste(event) {
     console.trace('onPaste:', event);
-    if (!document.getSelection().isCollapsed) {
-      console.trace('handle paste-over (perhaps remove paragraphs)');
+    if (this.hasSelectionAcrossParagraphs()) {
+      console.trace('handle paste-over (remove paragraphs)');
+    } else if (this.hasSelection()) {
+      console.trace('handle paste-over (remove selection)');
     }
-    console.trace('handle paste (perhaps remove paragraphs)');
+    console.trace('handle paste (perhaps insert paragraphs)');
   }
 
   onInput(event) {
