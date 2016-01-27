@@ -19,9 +19,6 @@ module.exports = {
         test: /\.tag$/,
         exclude: /node_modules/,
         loader: 'riotjs-loader',
-        query: {
-          type: 'none'
-        }
       }
     ],
     loaders: [
