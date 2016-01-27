@@ -1,13 +1,28 @@
 <paragraph oninput={ onInput }>
-  <span name='content'>{ text }</span>
+  <span name='content' contenteditable>{ text }</span>
 
-  this.text = opts.paragraph.get('text');
+  this.on('update', function() {
+    this.text = this.getText();
+  });
 
   onInput(event) {
     // If we got all the way down here, then the browser has probably changed
     // the content and we have to take it out and pass it to the model
-    console.trace('onInput:', event);
-    this.text.setText(this.displayedText());
+    var dt = this.displayedText();
+    console.trace('dt', dt);
+    this.setText(this.displayedText());
+  }
+
+  textModel() {
+    return opts.paragraph.get('text');
+  }
+
+  getText() {
+    return this.textModel().getText();
+  }
+
+  setText(newText) {
+    this.textModel().setText(newText);
   }
 
   displayedText() {

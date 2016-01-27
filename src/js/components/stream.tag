@@ -23,21 +23,19 @@ import './paragraph.tag'
   }
 
   onKeydown(event) {
-    console.trace('onKeydown:', event);
     if (event.keyIdentifier === 'Enter') {
       console.trace('handle enter (new paragraph)');
-      return true;
     } else if (event.code === 'Delete') {
       console.trace('handle delete (perhaps remove paragraph)');
     } else if (event.code === 'Backspace') {
       console.trace('handle backspace (perhaps remove paragraph)');
+      return true;
     } else {
       return true;
     }
   }
 
   onKeypress(event) {
-    console.trace('onKeypress:', event);
     if (this.hasSelectionAcrossParagraphs()) {
       console.trace('handle type-over (remove paragraphs)');
     } else {
@@ -46,12 +44,10 @@ import './paragraph.tag'
   }
 
   onCut(event) {
-    console.trace('onCut:', event);
     console.trace('handle cut (perhaps remove paragraphs)');
   }
 
   onPaste(event) {
-    console.trace('onPaste:', event);
     if (this.hasSelectionAcrossParagraphs()) {
       console.trace('handle paste-over (remove paragraphs)');
     } else if (this.hasSelection()) {
