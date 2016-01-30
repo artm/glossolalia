@@ -19,7 +19,7 @@ import './paragraph.tag'
   });
 
   hasSelection() {
-    return !document.getSelection().isCollapsed;
+    return !window.getSelection().isCollapsed;
   }
 
   hasSelectionAcrossParagraphs() {
@@ -30,7 +30,8 @@ import './paragraph.tag'
     console.trace('keydown');
     event.preventUpdate = true;
     if (event.keyIdentifier === 'Enter') {
-      console.trace('handle enter (new paragraph)');
+      this.onEnter(event);
+      return false;
     } else if (event.code === 'Delete') {
       console.trace('handle delete (perhaps remove paragraph)');
     } else if (event.code === 'Backspace') {
@@ -65,5 +66,20 @@ import './paragraph.tag'
       console.trace('handle paste-over (remove selection)');
     }
     console.trace('handle paste (perhaps insert paragraphs)');
+  }
+
+  onEnter(event) {
+    var selection = window.getSelection();
+    var paragraphNode = event.target;
+    var paragraph = paragraphNode._tag;
+    console.trace('onEnter', event);
+    switch(selection.type) {
+      case 'Caret':
+        console.trace('todo: enter new paragraph at', paragraphNode, selection, selection.getRangeAt(0));
+        break;
+      case 'Range':
+        console.trace('todo: remove selection then do the enter handling');
+        break;
+    }
   }
 </stream>

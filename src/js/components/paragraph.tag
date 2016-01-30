@@ -1,5 +1,5 @@
 <paragraph oninput={ onInput }>
-  <span name='content' contenteditable></span>
+  <span name='content'></span>
 
   this.on('update', function() {
     console.trace('p update');
