@@ -1,22 +1,30 @@
-import './paragraph.tag'
+import './paragraph.tag';
+import rangy from 'rangy';
+import 'rangy/lib/rangy-textrange';
 
 <stream>
   <h1>{ title }</h1>
   <section
-    onkeydown={ onKeydown }
     onkeypress={ onKeypress }
     oncut={ onCut }
     onpaste={ onPaste }
     >
-    <p riot-tag='paragraph' each={ paragraphs } paragraph={ this } contenteditable/>
+    <p
+      contenteditable
+      riot-tag='paragraph'
+      each={ paragraphs }
+      paragraph={ this }
+      onkeydown={ onKeydown }
+    />
   </section>
 
-  this.title = opts.stream.get('title').text;
-  this.paragraphs = opts.stream.get('paragraphs').asArray();
-
-  this.on('all', function(eventName) {
-    console.trace('riot event', eventname, this, arguments);
+  this.on('update', function() {
+    console.trace('stream update');
+    this.title = opts.stream.get('title').text;
+    this.paragraphs = opts.stream.get('paragraphs').asArray();
+    return true;
   });
+
 
   hasSelection() {
     return !window.getSelection().isCollapsed;
@@ -69,13 +77,15 @@ import './paragraph.tag'
   }
 
   onEnter(event) {
-    var selection = window.getSelection();
-    var paragraphNode = event.target;
-    var paragraph = paragraphNode._tag;
     console.trace('onEnter', event);
-    switch(selection.type) {
+    var selection = rangy.getSelection();
+    switch(selection.nativeSelection.type) {
       case 'Caret':
-        console.trace('todo: enter new paragraph at', paragraphNode, selection, selection.getRangeAt(0));
+        var paragraphNode = event.target;
+        var range = selection.getRangeAt(0).toCharacterRange(paragraphNode);
+        opts.stream.breakParagraph(event.item, range.start);
+        event.preventUpdate = false;
+        console.trace('todo: put caret in the new paragraph');
         break;
       case 'Range':
         console.trace('todo: remove selection then do the enter handling');

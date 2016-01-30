@@ -42,6 +42,10 @@ function onFileInitialize(model) {
 
 function onFileLoaded(doc) {
   console.trace('file loaded');
+  var streams = doc.getModel().getRoot().get('streams').asArray();
+  for(var i in streams) {
+    extendStream(streams[i], doc.getModel());
+  }
   riot.mount('editor', doc);
 }
 
@@ -58,6 +62,7 @@ function createStream(model, options) {
     title: title,
     paragraphs: paragraphs,
   });
+
   return stream;
 }
 
@@ -66,4 +71,17 @@ function createParagraph(model, options) {
     text: model.createString(options.text || '')
   });
   return paragraph;
+}
+
+function extendStream(stream, model) {
+  stream.breakParagraph = function(paragraph, charIndex) {
+    console.trace('stream break paragraph', this, arguments);
+    var oldText = paragraph.get('text').getText();
+    var head = oldText.substr(0, charIndex);
+    var tail = oldText.slice(charIndex);
+    paragraph.get('text').setText(head);
+    var paraIndex = this.get('paragraphs').indexOf(paragraph);
+    var newParagraph = createParagraph(model, {text: tail});
+    this.get('paragraphs').insert(paraIndex+1, newParagraph);
+  }.bind(stream);
 }
