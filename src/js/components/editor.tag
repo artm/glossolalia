@@ -3,7 +3,7 @@ import './stream.tag'
 <editor>
   <table width='100%'>
     <tr>
-      <td each={ streams } width='50%'>
+      <td each={ streams } width='50%' valign='top'>
         <stream stream={ this }></stream>
       </td>
     </tr>
