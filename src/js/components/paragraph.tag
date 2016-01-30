@@ -1,5 +1,4 @@
 <paragraph oninput={ onInput }>
-  <span name='content'></span>
 
   this.on('update', function() {
     console.trace('p update');
@@ -32,6 +31,6 @@
   }
 
   setDisplayedText(text) {
-    this.content.innerHTML = text;
+    this.root.innerText = text;
   }
 </paragraph>
