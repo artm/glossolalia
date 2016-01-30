@@ -4,17 +4,16 @@ import 'rangy/lib/rangy-textrange';
 
 <stream>
   <h1>{ title }</h1>
-  <section
-    onkeypress={ onKeypress }
-    oncut={ onCut }
-    onpaste={ onPaste }
-    >
+  <section>
     <p
       contenteditable
       riot-tag='paragraph'
       each={ paragraphs }
       paragraph={ this }
       onkeydown={ onKeydown }
+      onkeypress={ onKeypress }
+      oncut={ onCut }
+      onpaste={ onPaste }
     />
   </section>
 
