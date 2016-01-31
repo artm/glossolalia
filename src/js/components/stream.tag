@@ -34,6 +34,9 @@ import 'rangy/lib/rangy-textrange';
   onKeydown(event) {
     console.trace(event);
     event.preventUpdate = true;
+    if (event.code.startsWith("Arrow")) {
+      return true;
+    }
     return false;
   }
 
