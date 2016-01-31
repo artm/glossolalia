@@ -1,6 +1,7 @@
 import './paragraph.tag';
 import rangy from 'rangy';
 import 'rangy/lib/rangy-textrange';
+import $ from 'jquery';
 
 <stream>
   <h1>{ title }</h1>
@@ -24,7 +25,7 @@ import 'rangy/lib/rangy-textrange';
   });
 
   onKeydown(event) {
-    console.trace(event.type, event, this.selection());
+    console.trace(event.type, event);
     event.preventUpdate = true;
     if (motion(event)) {
       // allow motion with arrow keys
@@ -41,7 +42,7 @@ import 'rangy/lib/rangy-textrange';
   onKeypress(event) {
     console.trace(event.type, event);
     event.preventUpdate = true;
-    return !hasSelectionAcrossParagraphs();
+    return !this.selection().multipleParagraphs();
   }
 
   onCut(event) {
@@ -64,11 +65,16 @@ import 'rangy/lib/rangy-textrange';
 
   selection() {
     var sel = rangy.getSelection();
-    sel.anchorParagraph = 'unknown';
-    sel.anchorParagraphOffset = sel.anchorOffset;
-    sel.focusParagraph = 'unknown';
-    sel.focusParagraphOffset = sel.focusOffset;
-    return sel;
+    return {
+      __proto__: sel,
+      anchorParagraph: $(sel.anchorNode).closest('p').get(0)._tag,
+      anchorParagraphOffset: sel.anchorOffset,
+      focusParagraph: $(sel.focusNode).closest('p').get(0)._tag,
+      focusParagraphOffset: sel.focusOffset,
+      multipleParagraphs() {
+        return this.anchorParagraph != this.focusParagraph;
+      }
+    };
   }
 
   function motion(event) {
@@ -85,13 +91,5 @@ import 'rangy/lib/rangy-textrange';
 
   function deleteKey(event) {
     return event.code === 'Delete';
-  }
-
-  function hasSelection() {
-    return !window.getSelection().isCollapsed;
-  }
-
-  function hasSelectionAcrossParagraphs() {
-    return hasSelection();
   }
 </stream>
