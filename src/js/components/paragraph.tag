@@ -6,16 +6,12 @@
     return true;
   });
 
-  textModel() {
-    return opts.paragraph.get('text');
-  }
-
   getText() {
-    return this.textModel().getText();
+    return opts.paragraph.text()
   }
 
   setText(newText) {
-    this.textModel().setText(newText);
+    opts.paragraph.setText(newText);
   }
 
   displayedText() {

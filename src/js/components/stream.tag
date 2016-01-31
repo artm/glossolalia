@@ -12,15 +12,15 @@ import 'rangy/lib/rangy-textrange';
     oninput={ onInput } >
     <p
       riot-tag='paragraph'
-      each={ paragraphs }
-      paragraph={ this }
+      each={ p,i in paragraphs }
+      paragraph={ p }
     />
   </section>
 
   this.on('update', function() {
     console.trace('stream update');
-    this.title = opts.stream.get('title').text;
-    this.paragraphs = opts.stream.get('paragraphs').asArray();
+    this.title = opts.stream.title()
+    this.paragraphs = opts.stream.paragraphs();
   });
 
   hasSelection() {

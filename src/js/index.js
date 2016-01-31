@@ -46,12 +46,7 @@ function onFileLoaded(doc) {
   var model = doc.getModel();
   var root = model.getRoot();
   var wrappedDocument = Document.wrap(model, root);
-  console.log('wrapped', wrappedDocument, wrappedDocument.streams());
-  var streams = root.get('streams').asArray();
-  for(var i in streams) {
-    extendStream(streams[i], doc.getModel());
-  }
-  riot.mount('editor', doc);
+  riot.mount('editor', wrappedDocument);
 }
 
 function createStream(model, options) {

@@ -7,6 +7,6 @@ export default class Stream extends Base {
   }
 
   paragraphs() {
-    return wrapList('paragraphs', Paragraph);
+    return this.wrapList('paragraphs', Paragraph);
   }
 }

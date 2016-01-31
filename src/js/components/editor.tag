@@ -3,12 +3,14 @@ import './stream.tag'
 <editor>
   <table width='100%'>
     <tr>
-      <td each={ streams } width='50%' valign='top'>
-        <stream stream={ this }></stream>
+      <td each={ stream, i in streams } width='50%' valign='top'>
+        <stream stream={ stream }></stream>
       </td>
     </tr>
   </table>
 
-  var root = doc.getModel().getRoot();
-  this.streams = root.get('streams').asArray();
+  this.on('update', function() {
+    console.trace('editor update');
+    this.streams = opts.streams();
+  });
 </editor>
