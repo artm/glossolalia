@@ -34,7 +34,8 @@ import 'rangy/lib/rangy-textrange';
   onKeydown(event) {
     console.trace(event);
     event.preventUpdate = true;
-    if (event.code.startsWith("Arrow")) {
+    if (motion(event)) {
+      // allow motion with arrow keys
       return true;
     }
     return false;
@@ -62,5 +63,9 @@ import 'rangy/lib/rangy-textrange';
     console.trace(event);
     event.preventUpdate = true;
     return false;
+  }
+
+  function motion(event) {
+    return event.code.startsWith('Arrow') || event.code === 'Home' || event.code === 'End';
   }
 </stream>
