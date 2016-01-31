@@ -1,6 +1,7 @@
 import realtimeUtils from './realtime_utils';
 import authorize from './authorize';
 import './components/editor.tag';
+import Document from './models/document';
 
 authorize(setupManualAuthorization, start);
 
@@ -42,7 +43,11 @@ function onFileInitialize(model) {
 
 function onFileLoaded(doc) {
   console.trace('file loaded');
-  var streams = doc.getModel().getRoot().get('streams').asArray();
+  var model = doc.getModel();
+  var root = model.getRoot();
+  var wrappedDocument = Document.wrap(model, root);
+  console.log('wrapped', wrappedDocument, wrappedDocument.streams());
+  var streams = root.get('streams').asArray();
   for(var i in streams) {
     extendStream(streams[i], doc.getModel());
   }
