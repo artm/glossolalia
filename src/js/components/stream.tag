@@ -24,7 +24,7 @@ import 'rangy/lib/rangy-textrange';
   });
 
   onKeydown(event) {
-    console.trace(event.type, event);
+    console.trace(event.type, event, this.selection());
     event.preventUpdate = true;
     if (motion(event)) {
       // allow motion with arrow keys
@@ -62,6 +62,15 @@ import 'rangy/lib/rangy-textrange';
     return false;
   }
 
+  selection() {
+    var sel = rangy.getSelection();
+    sel.anchorParagraph = 'unknown';
+    sel.anchorParagraphOffset = sel.anchorOffset;
+    sel.focusParagraph = 'unknown';
+    sel.focusParagraphOffset = sel.focusOffset;
+    return sel;
+  }
+
   function motion(event) {
     return event.code.startsWith('Arrow') || event.code === 'Home' || event.code === 'End';
   }
@@ -85,5 +94,4 @@ import 'rangy/lib/rangy-textrange';
   function hasSelectionAcrossParagraphs() {
     return hasSelection();
   }
-
 </stream>
