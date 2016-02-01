@@ -32,6 +32,7 @@ import $ from 'jquery';
       // allow motion with arrow keys
       return true;
     } else if (enter(event)) {
+      this.onEnter(event);
     } else if (backspace(event)) {
       return this.onBackspace(event);
     } else if (deleteKey(event)) {
@@ -93,6 +94,9 @@ import $ from 'jquery';
       return true;
     }
     return false;
+  }
+
+  onEnter(event) {
   }
 
   deleteLargeSelection(event) {
