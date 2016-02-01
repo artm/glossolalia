@@ -33,6 +33,7 @@ import $ from 'jquery';
       return true;
     } else if (enter(event)) {
     } else if (backspace(event)) {
+      return this.onBackspace(event);
     } else if (deleteKey(event)) {
     } else if (!event.altKey && !event.ctrlKey && !event.metaKey) {
       return true;
@@ -67,6 +68,25 @@ import $ from 'jquery';
     var paragraphTag = this.selection().anchorParagraph;
     paragraphTag.pickUpEdits();
     return false;
+  }
+
+  onBackspace(event) {
+    if (this.selection().multipleParagraphs()) {
+      this.deleteLargeSelection(event);
+    } else if (this.selection().focusParagraphOffset === 0) {
+      this.glueParagraphUp(event);
+    } else {
+      // the backspace seems innocent enough, let the browser have at it
+      return true;
+    }
+    return false;
+  }
+
+  deleteLargeSelection(event) {
+  }
+
+  glueParagraphUp(event) {
+    // from selection to the previous
   }
 
   selection() {
