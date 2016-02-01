@@ -15,6 +15,7 @@ import $ from 'jquery';
       riot-tag='paragraph'
       each={ p,i in paragraphs }
       paragraph={ p }
+      oninput={ onInput }
     />
   </section>
 
@@ -60,6 +61,11 @@ import $ from 'jquery';
   onInput(event) {
     console.trace(event.type, event);
     event.preventUpdate = true;
+    /*
+     * only single paragraph edits will get here, so the paragraph of the caret is where it's at
+     */
+    var paragraphTag = this.selection().anchorParagraph;
+    paragraphTag.pickUpEdits();
     return false;
   }
 

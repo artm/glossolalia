@@ -21,4 +21,8 @@
   setDisplayedText(text) {
     this.root.innerText = text;
   }
+
+  pickUpEdits() {
+    this.setText(this.displayedText());
+  }
 </paragraph>
