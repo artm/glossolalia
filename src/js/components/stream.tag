@@ -35,6 +35,7 @@ import $ from 'jquery';
     } else if (backspace(event)) {
       return this.onBackspace(event);
     } else if (deleteKey(event)) {
+      return this.onDelete(event);
     } else if (!event.altKey && !event.ctrlKey && !event.metaKey) {
       return true;
     }
@@ -74,9 +75,21 @@ import $ from 'jquery';
     if (this.selection().multipleParagraphs()) {
       this.deleteLargeSelection(event);
     } else if (this.selection().focusParagraphOffset === 0) {
-      this.glueParagraphUp(event);
+      this.glueWithPreviousParagraph(event);
     } else {
       // the backspace seems innocent enough, let the browser have at it
+      return true;
+    }
+    return false;
+  }
+
+  onDelete(event) {
+    if (this.selection().multipleParagraphs()) {
+      this.deleteLargeSelection(event);
+    } else if (this.selection().caretAtParagraphEnd()) {
+      this.glueWithNextParagraph(event);
+    } else {
+      // the delete seems innocent enough, let the browser have at it
       return true;
     }
     return false;
@@ -85,8 +98,10 @@ import $ from 'jquery';
   deleteLargeSelection(event) {
   }
 
-  glueParagraphUp(event) {
-    // from selection to the previous
+  glueWithPreviousParagraph(event) {
+  }
+
+  glueWithNextParagraph(event) {
   }
 
   selection() {
@@ -98,7 +113,10 @@ import $ from 'jquery';
       focusParagraph: $(sel.focusNode).closest('p').get(0)._tag,
       focusParagraphOffset: sel.focusOffset,
       multipleParagraphs() {
-        return this.anchorParagraph != this.focusParagraph;
+        return this.anchorParagraph !== this.focusParagraph;
+      },
+      caretAtParagraphEnd() {
+        return this.isCollapsed && this.focusParagraphOffset === this.focusParagraph.displayedText().length;
       }
     };
   }
