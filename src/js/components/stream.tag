@@ -67,7 +67,7 @@ import $ from 'jquery';
     /*
      * only single paragraph edits will get here, so the paragraph of the caret is where it's at
      */
-    var paragraphTag = this.selection().anchorParagraph;
+    var paragraphTag = this.selection().startParagraph;
     paragraphTag.pickUpEdits();
     return false;
   }
@@ -75,7 +75,7 @@ import $ from 'jquery';
   onBackspace(event) {
     if (this.selection().multipleParagraphs()) {
       this.deleteLargeSelection(event, true);
-    } else if (this.selection().focusParagraphOffset === 0) {
+    } else if (this.selection().endOffset === 0) {
       this.glueWithPreviousParagraph(event);
     } else {
       // the backspace seems innocent enough, let the browser have at it
@@ -101,8 +101,8 @@ import $ from 'jquery';
     if (sel.multipleParagraphs()) {
       this.deleteLargeSelection(event, false);
     } else {
-      var p = sel.anchorParagraph;
-      opts.stream.breakParagraph(p.i, sel.anchorParagraphOffset, sel.focusParagraphOffset);
+      var p = sel.startParagraph;
+      opts.stream.breakParagraph(p.i, sel.startOffset, sel.endOffset);
       event.preventUpdate = false;
     }
   }
@@ -118,17 +118,21 @@ import $ from 'jquery';
 
   selection() {
     var sel = rangy.getSelection();
+    var startNode = sel.isBackwards() ? sel.focusNode : sel.anchorNode;
+    var startOffset = sel.isBackwards() ? sel.focusOffset : sel.anchorOffset;
+    var endNode = sel.isBackwards() ? sel.anchorNode : sel.focusNode;
+    var endOffset = sel.isBackwards() ? sel.anchorOffset : sel.focusOffset;
     return {
       __proto__: sel,
-      anchorParagraph: $(sel.anchorNode).closest('p').get(0)._tag,
-      anchorParagraphOffset: sel.anchorOffset,
-      focusParagraph: $(sel.focusNode).closest('p').get(0)._tag,
-      focusParagraphOffset: sel.focusOffset,
+      startParagraph: $(startNode).closest('p').get(0)._tag,
+      startOffset: startOffset,
+      endParagraph: $(endNode).closest('p').get(0)._tag,
+      endOffset: endOffset,
       multipleParagraphs() {
-        return this.anchorParagraph !== this.focusParagraph;
+        return this.startParagraph !== this.endParagraph;
       },
       caretAtParagraphEnd() {
-        return this.isCollapsed && this.focusParagraphOffset === this.focusParagraph.displayedText().length;
+        return this.isCollapsed && this.endOffset === this.endParagraph.displayedText().length;
       }
     };
   }
