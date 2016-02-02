@@ -74,7 +74,7 @@ import $ from 'jquery';
 
   onBackspace(event) {
     if (this.selection().multipleParagraphs()) {
-      this.deleteLargeSelection(event);
+      this.deleteLargeSelection(event, true);
     } else if (this.selection().focusParagraphOffset === 0) {
       this.glueWithPreviousParagraph(event);
     } else {
@@ -86,7 +86,7 @@ import $ from 'jquery';
 
   onDelete(event) {
     if (this.selection().multipleParagraphs()) {
-      this.deleteLargeSelection(event);
+      this.deleteLargeSelection(event, true);
     } else if (this.selection().caretAtParagraphEnd()) {
       this.glueWithNextParagraph(event);
     } else {
@@ -97,9 +97,17 @@ import $ from 'jquery';
   }
 
   onEnter(event) {
+    var sel = this.selection();
+    if (sel.multipleParagraphs()) {
+      this.deleteLargeSelection(event, false);
+    } else {
+      var p = sel.anchorParagraph;
+      opts.stream.breakParagraph(p.i, sel.anchorParagraphOffset, sel.focusParagraphOffset);
+      event.preventUpdate = false;
+    }
   }
 
-  deleteLargeSelection(event) {
+  deleteLargeSelection(event, andGlueTheEnds) {
   }
 
   glueWithPreviousParagraph(event) {

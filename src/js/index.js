@@ -2,6 +2,7 @@ import realtimeUtils from './realtime_utils';
 import authorize from './authorize';
 import './components/editor.tag';
 import Document from './models/document';
+import Paragraph from './models/paragraph';
 
 authorize(setupManualAuthorization, start);
 
@@ -54,9 +55,7 @@ function createStream(model, options) {
   var title = model.createString(options.title);
   console.trace('title:', title);
   var paragraphs = model.createList([
-    createParagraph(model, {
-      text: options.text || 'Placeholder'
-    })
+    Paragraph.create(model, options.text || 'Placeholder')
   ]);
   var stream = model.createMap({
     title: title,
@@ -64,24 +63,4 @@ function createStream(model, options) {
   });
 
   return stream;
-}
-
-function createParagraph(model, options) {
-  var paragraph = model.createMap({
-    text: model.createString(options.text || '')
-  });
-  return paragraph;
-}
-
-function extendStream(stream, model) {
-  stream.breakParagraph = function(paragraph, charIndex) {
-    console.trace('stream break paragraph', this, arguments);
-    var oldText = paragraph.get('text').getText();
-    var head = oldText.substr(0, charIndex);
-    var tail = oldText.slice(charIndex);
-    paragraph.get('text').setText(head);
-    var paraIndex = this.get('paragraphs').indexOf(paragraph);
-    var newParagraph = createParagraph(model, {text: tail});
-    this.get('paragraphs').insert(paraIndex+1, newParagraph);
-  }.bind(stream);
 }
